@@ -1,0 +1,41 @@
+<div cdkDropList
+     (cdkDropListDropped)="this.onColumnDrop($event)"
+     style="display:flex; gap:16px"
+     [cdkDropListData]="columns"
+     cdkDropListOrientation="horizontal"
+      cdkDropListGroup>
+  <div
+    *ngFor="let column of columns; let colIndex = index"
+    style="background-color: red"
+    class="example-container"
+  >
+    <div cdkDrag
+    [cdkDragData]="column">
+    <h2>{{ column.title }}</h2>
+    <div
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="column.cards"
+      class="example-list"
+    >
+      <div
+        *ngFor="let card of column.cards; let cardIndex = index"
+        class="example-box"
+        style="background-color: blue"
+        cdkDrag
+        [cdkDragData]="card"
+      >
+        {{ card.title }}
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<button (click)="reset()">Reset</button>
+
+<button (click)="login()">Sign in</button>
+<br/>
+
+<input type="file" [(ngModel)]="files">
+<button (click)="upload()">Upload</button>
