@@ -37,5 +37,5 @@
 <button (click)="login()">Sign in</button>
 <br/>
 
-<input type="file" [(ngModel)]="files">
+<input type="file" (change)="upFileSelected($event)">
 <button (click)="upload()">Upload</button>
