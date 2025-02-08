@@ -11,6 +11,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 
 // firebase config
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import {provideHttpClient} from '@angular/common/http';
 
 
 const config: SocketIoConfig = { url: 'http://localhost:80', options: {} };
@@ -27,5 +28,8 @@ export const appConfig: ApplicationConfig = {
         authDomain: "todolist-246-25a.firebaseapp.com",
         messagingSenderId: "874799892031",
         measurementId: "G-QKN60571QH" }),),
-    provideAuth(() => getAuth())],
+    provideAuth(() => getAuth()),
+    provideHttpClient(),
+  ],
+
 };

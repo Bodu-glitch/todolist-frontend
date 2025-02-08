@@ -22,6 +22,7 @@ import {SidebarComponent} from '../sidebar/sidebar.component';
 import {TaskDescriptionDialogComponent} from '../task-description-dialog/task-description-dialog.component';
 import {ShareDialogComponent} from '../share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
+import {FileService} from '../../services/file/file.service';
 
 interface card {
   id: string;
@@ -214,7 +215,8 @@ export class DragDropComponent implements OnInit {
 
   //firebase auth
   constructor(private gateway: GatewayService,
-              private auth: Auth) {
+              private auth: Auth,
+              private fileService: FileService) {
   }
 
   async login() { // Tạo hàm login
@@ -301,25 +303,28 @@ export class DragDropComponent implements OnInit {
 
   protected readonly signInWithPopup = signInWithPopup;
 
-  files!: File[]
-
+  formGroup = {
+    cardId: '83f6e347-1916-4526-b93f-f102598687b0',
+    file: File
+  }
+  files: File[] = [];
   upload() {
-    console.log(this.files);
-    const formData = new FormData();
-
-    formData.append('cardId', '83f6e347-1916-4526-b93f-f102598687b0');
-    formData.append('file', this.files[0]);
-    console.log(formData);
-    fetch('http://localhost:3000/card-attachment/upload-file', {
-      method: 'POST',
-      headers: {
-        'Authorization': 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImE0MzRmMzFkN2Y3NWRiN2QyZjQ0YjgxZDg1MjMwZWQxN2ZlNTk3MzciLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiMzktTmd1eeG7hW4gxJDhurduZyBHaWEgVMaw4budbmciLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jSzNQWlZUZU1zYTdrUkdWeXJBRUpON3ljVDE3bmxEcDI1QlJYSDFKaHlIZjFGS3VRPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3RvZG9saXN0LTI0Ni0yNWEiLCJhdWQiOiJ0b2RvbGlzdC0yNDYtMjVhIiwiYXV0aF90aW1lIjoxNzM4NTYxOTA5LCJ1c2VyX2lkIjoiRG0wd3BYOU40NFJrTDlkeElSaFNiaFQ0aHFwMiIsInN1YiI6IkRtMHdwWDlONDRSa0w5ZHhJUmhTYmhUNGhxcDIiLCJpYXQiOjE3Mzg1NjE5MDksImV4cCI6MTczODU2NTUwOSwiZW1haWwiOiJ0bjIxMjA3OUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJnb29nbGUuY29tIjpbIjEwNjQ1NTIwOTcxMDAyNDk4NTA5OCJdLCJlbWFpbCI6WyJ0bjIxMjA3OUBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.ovPXtAufjcZoh2GXxapBpb_k0NXLXonhsWtBnWhvDobm3yaNRI8xLSdKW3DH1kNtk87X1rSkVc93nPUp1f2IxbYsL_gjOZtZ-1OpQ--frpVGj-t5RNTo7voCzmaeaVyiSBjCfuc29P1t7bUW4412Ej4D-6zN2i6-4I88ajVRErT_eCJgqHnKXmqoMSi_RZWQiJVRcXuc-ttHNo6QB9CnxHEUvhRZNqV0JBzztPAu3E5HJiIo_mEVNbhIi_mylt25imtwRvE7EJFF_uUPNuAw6D5mhJTjMSBn3zV5nd9L7PjutAN0juqTsoJpJdMKikT7QpO8WDVQ_uvSYCL84wxOIw'
-      },
-
-      body: formData
+    console.log(this.files[0]);
+    this.fileService.upload({
+      cardId: this.formGroup.cardId,
+      file: this.files[0]
+    }).subscribe((data) => {
+      console.log(data);
     })
-      .then(r => r.json())
-      .then(console.log);
+  }
+
+  upFileSelected($event: any) {
+    const selectedFiles = $event.target.files;
+    console.log(selectedFiles);
+    if (selectedFiles.length > 0) {
+      this.files = Array.from(selectedFiles);
+      console.log(this.files);
+    }
   }
 
   readonly dialog = inject(MatDialog);
