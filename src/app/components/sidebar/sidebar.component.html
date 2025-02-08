@@ -1,0 +1,43 @@
+<div class="sidebar">
+  <div class="sidebar-header">
+    <img [src]="userInfo.avatar" alt="logo" class="avatar"/>
+    <div class="workspace-info">
+      <div class="user-name">{{ userInfo.name }}</div>
+      <span class="description">Workspace Account</span>
+    </div>
+  </div>
+
+  <div class="solid-line"></div>
+
+  <div class="menu">
+    <div class="menu-item">
+      <mat-icon class="material-symbols-outlined">home</mat-icon>
+      Home
+    </div>
+    <div class="menu-item">
+      <mat-icon class="material-symbols-outlined">table_chart</mat-icon>
+      Board
+    </div>
+    <div class="menu-item">
+      <mat-icon class="material-symbols-outlined">article</mat-icon>
+      All tasks
+    </div>
+  </div>
+
+  <div class="solid-line"></div>
+
+  <div class="boards-section">
+    <div class="boards-section-header">
+      <h5>Your boards</h5>
+      <mat-icon>add</mat-icon>
+    </div>
+
+    @for (board of boards; track $index) {
+      <div class="board-item">
+        <span class="board-color {{board.color}}"></span>
+        <span>{{ board.name }}</span>
+      </div>
+    }
+
+  </div>
+</div>

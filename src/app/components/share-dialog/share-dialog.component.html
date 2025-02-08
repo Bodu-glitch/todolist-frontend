@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>Share board</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="share-container">
+    <div class="share-form">
+      <mat-form-field class="search-input" appearance="outline">
+        <mat-label>Hinted search text</mat-label>
+        <input matInput/>
+      </mat-form-field>
+
+      <mat-select class="input-select" placeholder="Member">
+        <mat-option value="input1">Member</mat-option>
+        <mat-option value="input2">Manager</mat-option>
+      </mat-select>
+
+      <button mat-raised-button color="primary" class="share-button">Share</button>
+    </div>
+
+    <mat-list class="user-list">
+      <div class="user-item">
+        <img
+          matListAvatar
+          src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
+          alt="User Avatar"
+          class="users-avatar"
+        />
+        <div class="user-info">
+          <div class="name">Trinh Tu Hao</div>
+          <div class="email">hhaozzzzzzz</div>
+        </div>
+      </div>
+    </mat-list>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>

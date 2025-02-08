@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {
   CdkDragDrop,
   CdkDrag,
@@ -9,15 +9,19 @@ import {
 } from '@angular/cdk/drag-drop';
 import {GatewayService} from '../../services/gateway.service';
 import {NgClass, NgForOf} from '@angular/common';
-import { CalendarOptions } from '@fullcalendar/core';
+import {CalendarOptions} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import interactionPlugin from '@fullcalendar/interaction';
 import timegridPlugin from '@fullcalendar/timegrid';
 import listPlug from '@fullcalendar/list';
-import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
-import {MatIcon} from '@angular/material/icon';
+import {Auth, GoogleAuthProvider, signInWithPopup} from '@angular/fire/auth';
 import {FormsModule} from '@angular/forms';
+import {NavbarComponent} from '../navbar/navbar.component';
+import {SidebarComponent} from '../sidebar/sidebar.component';
+import {TaskDescriptionDialogComponent} from '../task-description-dialog/task-description-dialog.component';
+import {ShareDialogComponent} from '../share-dialog/share-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
 
 interface card {
   id: string;
@@ -134,13 +138,13 @@ const columns: column[] = [
 @Component({
   selector: 'app-drag-drop',
   imports: [
-    CdkDropList, CdkDrag, CdkDropListGroup, FullCalendarModule, MatIcon, NgForOf, FormsModule
+    CdkDropList, CdkDrag, CdkDropListGroup, FullCalendarModule, NgForOf, FormsModule, NavbarComponent, SidebarComponent
   ],
   templateUrl: './drag-drop.component.html',
   standalone: true,
   styleUrl: './drag-drop.component.scss'
 })
-export class DragDropComponent implements OnInit{
+export class DragDropComponent implements OnInit {
   calendarOptions: CalendarOptions = {
     headerToolbar: {
       left: 'prev,next today',
@@ -151,7 +155,7 @@ export class DragDropComponent implements OnInit{
     initialView: 'listMonth',
     businessHours: true, // display business hours
     editable: true,
-    plugins:[timegridPlugin,dayGridPlugin,interactionPlugin,listPlug],
+    plugins: [timegridPlugin, dayGridPlugin, interactionPlugin, listPlug],
     events: [
       {
         title: 'Business Lunch',
@@ -187,21 +191,21 @@ export class DragDropComponent implements OnInit{
       //   end: '2025-01-13T16:00:00',
       //   display: 'background'
       // },
-    //   // red areas where no events can be dropped
-    //   {
-    //     start: '2025-01-24',
-    //     end: '2025-01-28',
-    //     overlap: false,
-    //     display: 'background',
-    //     color: '#ff9f89'
-    //   },
-    //   {
-    //     start: '2025-01-06',
-    //     end: '2025-01-08',
-    //     overlap: false,
-    //     display: 'background',
-    //     color: '#ff9f89'
-    //   }
+      //   // red areas where no events can be dropped
+      //   {
+      //     start: '2025-01-24',
+      //     end: '2025-01-28',
+      //     overlap: false,
+      //     display: 'background',
+      //     color: '#ff9f89'
+      //   },
+      //   {
+      //     start: '2025-01-06',
+      //     end: '2025-01-08',
+      //     overlap: false,
+      //     display: 'background',
+      //     color: '#ff9f89'
+      //   }
     ]
 
   };
@@ -213,7 +217,7 @@ export class DragDropComponent implements OnInit{
               private auth: Auth) {
   }
 
-  async login(){ // Tạo hàm login
+  async login() { // Tạo hàm login
     const credential = await signInWithPopup(this.auth, new GoogleAuthProvider());
     // Sử dụng signInWithPopup để đăng nhập bằng Google
     this.currentUser = credential.user; // Lưu thông tin người dùng vào biến currentUser
@@ -227,30 +231,32 @@ export class DragDropComponent implements OnInit{
     id: string;
     x: number;
     y: number;
-  } = { id: 'abc', x: 0, y: 0 };
+  } = {id: 'abc', x: 0, y: 0};
+
   ngOnInit() {
-      this.gateway.getMessage().subscribe((data: unknown) => {
-          console.log(data);
-        });
-      this.gateway.listenForTasksChange().subscribe((data: column[]) => {
-          this.columns = data;
-      })
-      this.gateway.listenForMouseMove().subscribe((data: {id:string, x: number, y: number}) => {
-        console.log(data)
-        this.data = data;
-      })
-      this.gateway.joinBoard('abc', this.columns);
+    this.gateway.getMessage().subscribe((data: unknown) => {
+      console.log(data);
+    });
+    this.gateway.listenForTasksChange().subscribe((data: column[]) => {
+      this.columns = data;
+    })
+    this.gateway.listenForMouseMove().subscribe((data: { id: string, x: number, y: number }) => {
+      console.log(data)
+      this.data = data;
+    })
+    this.gateway.joinBoard('abc', this.columns);
   }
 
   todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
 
   done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
   columns: column[] = [
-    { ...columns[0], cards: [...columns[0].cards] },
-    { ...columns[1], cards: [...columns[1].cards] },
-    { ...columns[2], cards: [...columns[2].cards] },
-    { ...columns[0], cards: [...columns[0].cards] }
+    {...columns[0], cards: [...columns[0].cards]},
+    {...columns[1], cards: [...columns[1].cards]},
+    {...columns[2], cards: [...columns[2].cards]},
+    {...columns[0], cards: [...columns[0].cards]}
   ];
+
   drop(event: CdkDragDrop<card[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -268,8 +274,8 @@ export class DragDropComponent implements OnInit{
 
   reset() {
     this.columns = [
-      { ...columns[0], cards: [...columns[0].cards] },
-      { ...columns[1], cards: [...columns[1].cards] }
+      {...columns[0], cards: [...columns[0].cards]},
+      {...columns[1], cards: [...columns[1].cards]}
     ];
   }
 
@@ -296,6 +302,7 @@ export class DragDropComponent implements OnInit{
   protected readonly signInWithPopup = signInWithPopup;
 
   files!: File[]
+
   upload() {
     console.log(this.files);
     const formData = new FormData();
@@ -313,5 +320,15 @@ export class DragDropComponent implements OnInit{
     })
       .then(r => r.json())
       .then(console.log);
+  }
+
+  readonly dialog = inject(MatDialog);
+
+  openDescriptionDialog() {
+    const descriptionDialogRef = this.dialog.open(TaskDescriptionDialogComponent);
+
+    descriptionDialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }
