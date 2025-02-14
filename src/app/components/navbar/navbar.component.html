@@ -1,0 +1,33 @@
+<div class="navbar">
+  <div class="navbar-left">
+    <div class="logo">
+      <mat-icon class="material-symbols-outlined">home</mat-icon>
+      TickTask
+    </div>
+    <div class="navbar__solid-line"></div>
+    <div class="search-bar">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Search">
+    </div>
+    <div class="navbar__solid-line"></div>
+    <div class="filter">
+      <mat-icon>filter_list</mat-icon>
+      Filter
+    </div>
+    <div class="navbar__solid-line"></div>
+    <div class="view">
+      <mat-icon>fullscreen</mat-icon>
+      View
+    </div>
+  </div>
+
+  <div class="navbar-right">
+
+    <div class="icons">
+      <mat-icon class="material-symbols-outlined" (click)="openShareDialog()">group_add</mat-icon>
+      <mat-icon class="material-symbols-outlined" (click)="openNotiDialog()">notifications</mat-icon>
+      <mat-icon>more_vert</mat-icon>
+
+    </div>
+  </div>
+</div>

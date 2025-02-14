@@ -1,0 +1,134 @@
+.sidebar {
+  width: 230px;
+  height: 100%;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      background-color: #0079bf;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 18px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .workspace-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+
+      .user-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 16px;
+      }
+
+      span {
+        font-size: 14px;
+        line-height: 14px;
+        color: #888;
+      }
+    }
+  }
+
+  .solid-line {
+    width: 100%;
+    height: 1px;
+    background-color: #c3c3c3;
+    margin: 1rem 0;
+  }
+
+  .menu {
+    .menu-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 6px;
+
+      &:hover {
+        background-color: #f4f5f7;
+      }
+
+      &.active {
+        background-color: #e4f0f6;
+        color: #0079bf;
+      }
+
+      .add-icon {
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .workspace-section {
+    margin-top: 1rem;
+
+    .menu-item {
+      margin-top: 0.5rem;
+    }
+  }
+
+  .boards-section {
+    margin-top: 0.5rem;
+
+    .boards-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h5 {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        margin: 0;
+      }
+    }
+
+    .board-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 14px;
+
+      &:hover {
+        background-color: #f4f5f7;
+      }
+
+      .board-color {
+        width: 20px;
+        height: 16px;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+
+        &.grey {
+          background-color: #b2b2b2;
+        }
+
+        &.blue {
+          background-color: #0079bf;
+        }
+      }
+    }
+  }
+}

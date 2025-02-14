@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Title</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="description-container">
+    <mat-chip class="tag-button">
+      # Tags
+    </mat-chip>
+
+    <h3>Note</h3>
+    <mat-form-field class="notes" appearance="outline">
+      <textarea matInput placeholder="Insert your notes here..."></textarea>
+    </mat-form-field>
+
+    <div class="assignees">
+      <h3>Assignee</h3>
+      <div class="assignee-list">
+        <mat-chip class="assignee-chip">
+          <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="User Avatar"/>
+          <span>Nguyen Dang Gia Tuong</span>
+        </mat-chip>
+        <mat-chip class="assignee-chip">
+          <mat-icon>person</mat-icon>
+          <span>Trinh Tu Hao</span>
+        </mat-chip>
+        <mat-chip class="assignee-chip">
+          <mat-icon>person</mat-icon>
+          <span>Tran Minh Quan</span>
+        </mat-chip>
+      </div>
+    </div>
+
+    <div class="checklist">
+      <h3>Checklist</h3>
+      <mat-checkbox>Add new subtask</mat-checkbox>
+    </div>
+
+    <h3>Comments</h3>
+    <mat-form-field class="comments" appearance="outline">
+      <mat-label>Comments</mat-label>
+      <textarea matInput placeholder="Add your comment..."></textarea>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions>

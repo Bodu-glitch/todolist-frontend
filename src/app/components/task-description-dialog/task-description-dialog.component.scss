@@ -1,0 +1,80 @@
+//.task-details-container {
+//  padding: 16px;
+//  display: flex;
+//  flex-direction: column;
+//  gap: 16px;
+//  width: 400px;
+//  max-width: 100%;
+
+.assignee-chip {
+  display: flex;
+  align-items: center;
+}
+
+textarea {
+  border: none;
+  resize: none;
+}
+
+::ng-deep.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mat-mdc-notch-piece {
+  border: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+  }
+
+  .close-button {
+    margin-left: auto;
+  }
+}
+
+.tag-button {
+  font-size: 12px;
+  text-transform: none;
+}
+
+.notes,
+.comments {
+  width: 100%;
+}
+
+.assignees {
+  h3 {
+    margin-bottom: 8px;
+  }
+
+  .assignee-list {
+    display: flex;
+    gap: 8px;
+
+    .assignee-chip {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+.checklist {
+  h3 {
+    margin-bottom: 8px;
+  }
+
+  mat-checkbox {
+    margin-top: 8px;
+  }
+}
+
+//}
