@@ -11,7 +11,8 @@ const initialState: BoardState = {
 
 export const boardReducer = createReducer(
   initialState,
-  on(boardActions.getBoard, (state) => {
+  on(boardActions.getBoard, (state, {type}) => {
+    console.log(type)
     return {
       ...state,
       isGettingBoard: true,
@@ -19,7 +20,8 @@ export const boardReducer = createReducer(
       getBoardError: ''
     };
   }),
-  on(boardActions.getBoardSuccess, (state, {board}) => {
+  on(boardActions.getBoardSuccess, (state, {board, type}) => {
+    console.log(type)
     return {
       ...state,
       board,
@@ -28,7 +30,8 @@ export const boardReducer = createReducer(
       getBoardError: ''
     };
   }),
-  on(boardActions.getBoardFailure, (state, {errorMessage}) => {
+  on(boardActions.getBoardFailure, (state, {errorMessage, type}) => {
+    console.log(type)
     return {
       ...state,
       isGettingBoard: false,

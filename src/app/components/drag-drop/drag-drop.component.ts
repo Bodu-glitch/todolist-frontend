@@ -26,8 +26,10 @@ import {FileService} from '../../services/file/file.service';
 import {Store} from '@ngrx/store';
 import {AuthState} from '../../ngrx/auth/auth.state';
 import * as authActions from '../../ngrx/auth/auth.actions';
+import * as boardActions from '../../ngrx/board/board.actions';
 import {AuthService} from '../../services/auth/auth.service';
 import {filter} from 'rxjs';
+import {BoardState} from '../../ngrx/board/board.state';
 
 interface card {
   id: string;
@@ -221,7 +223,10 @@ export class DragDropComponent implements OnInit {
   //firebase auth
   constructor(private gateway: GatewayService,
               private fileService: FileService,
-              private store: Store<{ auth: AuthState }>,
+              private store: Store<{
+                auth: AuthState,
+                board: BoardState
+              }>,
   ) {
 
   }
@@ -271,6 +276,15 @@ export class DragDropComponent implements OnInit {
     this.store.select('auth', 'getAccessTokenSuccess').subscribe((data) => {
       if (data) {
         this.store.dispatch(authActions.login({accessToken: this.token}));
+      }
+    })
+    this.store.select('board', 'isGettingBoardSuccess').subscribe((data) => {
+      if (data) {
+        this.store.select('board', 'board').subscribe((data) => {
+          if (data) {
+            console.log(data);
+          }
+        })
       }
     })
   }
@@ -349,5 +363,10 @@ export class DragDropComponent implements OnInit {
     descriptionDialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  getBoard() {
+    console.log('get board');
+    this.store.dispatch(boardActions.getBoard({boardId: '3cbd05d6-b90f-4707-a99d-00450b40a7da'}));
   }
 }
