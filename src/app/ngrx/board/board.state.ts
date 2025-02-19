@@ -1,4 +1,4 @@
-import {ListState} from '../list/list.state';
+import {ListState, List} from '../list/list.state';
 import {LabelState} from '../label/label.state';
 
 export interface BoardState {
@@ -14,7 +14,7 @@ export interface Board {
   name: string
   backgroundId: string
   createAt: Date
-  lists: ListState[] | unknown
+  lists: List[] | unknown
   owner: string
   members: string[]
   labels: LabelState[]

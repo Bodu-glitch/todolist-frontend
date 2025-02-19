@@ -1,12 +1,11 @@
-import {Actions, createEffect} from '@ngrx/effects';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {inject} from '@angular/core';
 import {BoardService} from '../../services/board/board.service';
 import {ListService} from '../../services/list/list.service';
 
-import {ofType} from '@ngrx/effects';
 import * as boardActions from './board.actions';
 import {catchError, map, switchMap, of, forkJoin} from 'rxjs';
-import {ListState} from '../list/list.state';
+import {ListState, List} from '../list/list.state';
 import {Board} from './board.state';
 
 export const getBoard$ = createEffect(
@@ -25,7 +24,7 @@ export const getBoard$ = createEffect(
             return boardActions.getBoardSuccess({
               board: {
                 ...board,
-                lists: lists || [] as ListState[]
+                lists: lists || [] as List[]
               }
             });
           }),

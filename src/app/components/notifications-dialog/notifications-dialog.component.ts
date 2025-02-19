@@ -22,17 +22,17 @@ export class NotificationsDialogComponent {
     },
     {
       "avatar": "A",
-      "title": "List item",
+      "title": "ListState item",
       "description": "Supporting line text lorem ipsum dolor sit amet, consectetur."
     },
     {
       "avatar": "A",
-      "title": "List item",
+      "title": "ListState item",
       "description": "Supporting line text lorem ipsum dolor sit amet, consectetur."
     },
     {
       "avatar": "A",
-      "title": "List item",
+      "title": "ListState item",
       "description": "Supporting line text lorem ipsum dolor sit amet, consectetur."
     }
   ];

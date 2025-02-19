@@ -19,8 +19,10 @@ import {authReducer} from './ngrx/auth/auth.reducer';
 // effects
 import * as authEffects from './ngrx/auth/auth.effects';
 import * as boardEffects from './ngrx/board/board.effects';
+import * as listEffects from './ngrx/list/list.effects';
 import {provideEffects} from '@ngrx/effects';
 import {boardReducer} from './ngrx/board/board.reducer';
+import {listReducer} from './ngrx/list/list.reducer';
 
 
 const config: SocketIoConfig = {url: 'http://localhost:80', options: {}};
@@ -41,11 +43,13 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideStore({
       auth: authReducer,
-      board: boardReducer
+      board: boardReducer,
+      list: listReducer
     }),
+    provideState({name: 'list', reducer: listReducer}),
     provideState({name: 'auth', reducer: authReducer}),
     provideState({name: "board", reducer: boardReducer}),
-    provideEffects([authEffects, boardEffects]),
+    provideEffects([authEffects, listEffects, boardEffects]),
     provideHttpClient(), provideStore()],
 
 };

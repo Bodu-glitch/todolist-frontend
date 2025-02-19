@@ -8,37 +8,40 @@
       <div cdkDropList
            (cdkDropListDropped)="this.onColumnDrop($event)"
            style="display:flex; gap:16px"
-           [cdkDropListData]="columns"
+           [cdkDropListData]="list$ | async"
            cdkDropListOrientation="horizontal"
            cdkDropListGroup
            class="drag-drop-container">
-        <div
-          *ngFor="let column of columns; let colIndex = index"
-          style="background-color: white"
-          class="example-container"
-        >
-          <div cdkDrag
-               [cdkDragData]="column">
-            <h2>{{ column.title }}</h2>
+        @if (Array.isArray(columns$)) {
+          @for (column of columns$; track $index) {
             <div
-              cdkDropList
-              (cdkDropListDropped)="drop($event)"
-              [cdkDropListData]="column.cards"
-              class="example-list"
+              style="background-color: white"
+              class="example-container"
             >
-              <div
-                *ngFor="let card of column.cards; let cardIndex = index"
-                class="example-box"
-                style="background-color: whitesmoke"
-                cdkDrag
-                [cdkDragData]="card"
-                (click)="openDescriptionDialog()"
-              >
-                {{ card.title }}
+              <div cdkDrag
+                   [cdkDragData]="column">
+                <h2>{{ column.title }}</h2>
+                <div
+                  cdkDropList
+                  (cdkDropListDropped)="drop($event)"
+                  [cdkDropListData]="column.cards"
+                  class="example-list"
+                >
+                  <div
+                    *ngFor="let card of column.cards; let cardIndex = index"
+                    class="example-box"
+                    style="background-color: whitesmoke"
+                    cdkDrag
+                    [cdkDragData]="card"
+                    (click)="openDescriptionDialog()"
+                  >
+                    {{ card.title }}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          }
+        }
       </div>
 
       <div class="btns">
