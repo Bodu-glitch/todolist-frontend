@@ -9,6 +9,10 @@ export interface ListState {
   isUpdatingLists: boolean
   isUpdatingListsSuccess: boolean
   updateListsError: string
+
+  isUpdatingCard: boolean
+  isUpdatingCardSuccess: boolean
+  updateCardError: string
 }
 
 export interface List {

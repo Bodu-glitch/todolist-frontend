@@ -10,7 +10,11 @@ const initialState: ListState = {
 
   isUpdatingLists: false,
   isUpdatingListsSuccess: false,
-  updateListsError: ''
+  updateListsError: '',
+
+  isUpdatingCard: false,
+  isUpdatingCardSuccess: false,
+  updateCardError: ''
 };
 
 export const listReducer = createReducer(
@@ -42,5 +46,34 @@ export const listReducer = createReducer(
       isUpdatingListsSuccess: false,
       updateListsError: error
     };
-  })
+  }),
+  on(listActions.updateCard, (state, {type, previousList, list, boardId}) => {
+    console.log(type)
+    console.log(previousList)
+    console.log(list)
+    return {
+      ...state,
+      isUpdatingLists: false,
+      isUpdatingCard: true,
+      isUpdatingCardSuccess: false,
+      updateCardError: ''
+    };
+  }),
+  on(listActions.updateCardSuccess, (state, {list, type}) => {
+    console.log(type)
+    console.log(list)
+    return {
+      ...state,
+      isUpdatingCardSuccess: true,
+      isUpdatingCard: false,
+    };
+  }),
+  on(listActions.updateCardFailure, (state, {error, type}) => {
+    return {
+      ...state,
+      isUpdatingCard: false,
+      isUpdatingCardSuccess: false,
+      updateCardError: error
+    };
+  }),
 )

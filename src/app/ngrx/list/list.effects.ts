@@ -19,3 +19,19 @@ export const updatePosition$ = createEffect(
     functional: true
   }
 )
+
+export const updateCard$ = createEffect(
+  (action$ = inject(Actions), listService = inject(ListService)) => {
+    return action$.pipe(
+      ofType(listActions.updateCard),
+      switchMap(({previousList, list, boardId}) => {
+        return listService.updateListCard(previousList, list, boardId).pipe(
+          map((value, index) => listActions.updateCardSuccess(value as any)),
+          catchError((error) => of(listActions.updateCardFailure({error: error.message || 'Unknown error'}))
+          ));
+      })
+    );
+  }, {
+    functional: true
+  }
+)

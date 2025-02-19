@@ -30,4 +30,13 @@ export class ListService {
       boardId
     }, {headers: {Authorization: this.accesToken}});
   }
+
+  updateListCard(previousList: List, list: List, boardId: string) {
+    console.log(previousList, list, boardId);
+    return this.httpClient.put(`http://localhost:3000/list/update-list/card`, {
+      previousList,
+      list,
+      boardId
+    }, {headers: {Authorization: this.accesToken}});
+  }
 }

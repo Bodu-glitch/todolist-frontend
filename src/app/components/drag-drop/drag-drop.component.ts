@@ -229,6 +229,10 @@ export class DragDropComponent implements OnInit {
 
   drop(event: CdkDragDrop<any>) {
     console.log(event)
+
+    const previousIndex = parseInt(event.previousContainer.id.split('-').pop()!, 10) - 1;
+    const currentIndex = parseInt(event.container.id.split('-').pop()!, 10) - 1;
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -240,6 +244,17 @@ export class DragDropComponent implements OnInit {
       );
     }
     console.log(this.columns$);
+
+    if (Array.isArray(this.columns$)){
+      console.log(this.columns$[previousIndex]);
+      console.log(this.columns$[currentIndex]);
+      this.store.dispatch(listActions.updateCard({
+        previousList: this.columns$[previousIndex],
+        list: this.columns$[currentIndex],
+        boardId: '3cbd05d6-b90f-4707-a99d-00450b40a7da'
+      }));
+    }
+
     // this.gateway.onTasksChange('abc', this.columns$);
   }
 
