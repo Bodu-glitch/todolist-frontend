@@ -1,0 +1,14 @@
+<mat-drawer-container class="drawer-container">
+  <mat-drawer #drawer mode="side" class=".blurred-drawer">
+    Notifications
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+    </mat-toolbar>
+
+    <div id="content-routing">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

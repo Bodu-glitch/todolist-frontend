@@ -1,0 +1,70 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="logo">
+      <mat-icon class="material-symbols-outlined">assignment</mat-icon>
+      Taskly
+    </div>
+
+    <mat-selection-list>
+      <mat-list-item>
+        <mat-icon class="material-symbols-outlined">home</mat-icon>
+        <span>Home</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon class="material-symbols-outlined">all_inbox</mat-icon>
+        <span>All boards</span>
+      </mat-list-item>
+
+      <mat-list-item>
+        <mat-icon class="material-symbols-outlined">assignment</mat-icon>
+        <span>All tasks</span>
+      </mat-list-item>
+
+      <mat-list-item (click)="openNotificationsDrawer()">
+        <mat-icon class="material-symbols-outlined">notifications</mat-icon>
+        <span>Notifications</span>
+      </mat-list-item>
+
+      <mat-list-item (click)="openSearchDrawer()">
+        <mat-icon class="material-symbols-outlined">search</mat-icon>
+        <span>Search</span>
+      </mat-list-item>
+    </mat-selection-list>
+
+    <p class="section-title">
+      My boards
+      <mat-icon class="material-symbols-outlined add-board-btn">add</mat-icon>
+    </p>
+    <mat-selection-list>
+      @for (board of boards; track $index) {
+        <mat-list-item>
+          <img
+            src="{{ board.background }}"
+            alt="" class="background">
+          <span>{{ board.name }}</span>
+        </mat-list-item>
+      }
+    </mat-selection-list>
+
+    <p class="section-title">Invited boards</p>
+
+    <div class="profile">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw4xIzlTTRJKIQB1tq1Jbs5Rfj7hU6h1UtPg&s"
+           alt="Profile">
+      <div class="info">
+        <p>Name</p>
+        <span>Workspace Account</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <!--  <mat-sidenav-content class="content">-->
+  <!--    <mat-toolbar color="primary">-->
+  <!--      <button mat-icon-button (click)="toggleSidebar()">-->
+  <!--        <mat-icon class="material-symbols-outlined">menu</mat-icon>-->
+  <!--      </button>-->
+  <!--      <span>Taskly Dashboard</span>-->
+  <!--    </mat-toolbar>-->
+  <!--  </mat-sidenav-content>-->
+</mat-sidenav-container>
