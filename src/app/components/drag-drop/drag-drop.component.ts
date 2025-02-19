@@ -7,7 +7,7 @@ import {
   transferArrayItem,
   CdkDropListGroup
 } from '@angular/cdk/drag-drop';
-import {GatewayService} from '../../services/gateway.service';
+import {GatewayService} from '../../services/gateway/gateway.service';
 import {NgClass, NgForOf} from '@angular/common';
 import {CalendarOptions} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -23,6 +23,13 @@ import {TaskDescriptionDialogComponent} from '../task-description-dialog/task-de
 import {ShareDialogComponent} from '../share-dialog/share-dialog.component';
 import {MatDialog} from '@angular/material/dialog';
 import {FileService} from '../../services/file/file.service';
+import {Store} from '@ngrx/store';
+import {AuthState} from '../../ngrx/auth/auth.state';
+import * as authActions from '../../ngrx/auth/auth.actions';
+import * as boardActions from '../../ngrx/board/board.actions';
+import {AuthService} from '../../services/auth/auth.service';
+import {filter} from 'rxjs';
+import {BoardState} from '../../ngrx/board/board.state';
 
 interface card {
   id: string;
@@ -211,21 +218,25 @@ export class DragDropComponent implements OnInit {
 
   };
 
-  currentUser: any;
+  token!: string
 
   //firebase auth
   constructor(private gateway: GatewayService,
-              private auth: Auth,
-              private fileService: FileService) {
+              private fileService: FileService,
+              private store: Store<{
+                auth: AuthState,
+                board: BoardState
+              }>,
+  ) {
+
   }
 
-  async login() { // Tạo hàm login
-    const credential = await signInWithPopup(this.auth, new GoogleAuthProvider());
-    // Sử dụng signInWithPopup để đăng nhập bằng Google
-    this.currentUser = credential.user; // Lưu thông tin người dùng vào biến currentUser
-    console.log(this.currentUser); // Log ra thông tin người dùng
-    const token = await credential.user.getIdToken(); // Lấy token của người dùng
-    console.log(token); // Log ra token
+  login() {
+    this.store.dispatch(authActions.signInWithGoogle());
+  }
+
+  logout() {
+    this.store.dispatch(authActions.logout());
   }
 
   isMouseLeave = false;
@@ -247,6 +258,35 @@ export class DragDropComponent implements OnInit {
       this.data = data;
     })
     this.gateway.joinBoard('abc', this.columns);
+    this.store.select('auth', 'isLogoutSuccess').subscribe((data) => {
+      if (data) {
+        this.store.dispatch(authActions.clearState());
+      }
+    })
+    this.store.select('auth', 'loginErrorMessage').subscribe((data) => {
+      if (data) {
+        console.log(data);
+      }
+    })
+    this.store.select('auth', 'idToken').subscribe((data) => {
+      if (data) {
+        this.token = data;
+      }
+    });
+    this.store.select('auth', 'getAccessTokenSuccess').subscribe((data) => {
+      if (data) {
+        this.store.dispatch(authActions.login({accessToken: this.token}));
+      }
+    })
+    this.store.select('board', 'isGettingBoardSuccess').subscribe((data) => {
+      if (data) {
+        this.store.select('board', 'board').subscribe((data) => {
+          if (data) {
+            console.log(data);
+          }
+        })
+      }
+    })
   }
 
   todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
@@ -274,19 +314,6 @@ export class DragDropComponent implements OnInit {
     this.gateway.onTasksChange('abc', this.columns);
   }
 
-  reset() {
-    this.columns = [
-      {...columns[0], cards: [...columns[0].cards]},
-      {...columns[1], cards: [...columns[1].cards]}
-    ];
-  }
-
-  onMouseMove($event: MouseEvent) {
-    this.gateway.onMouseMove($event.x, $event.y);
-  }
-
-  protected readonly console = console;
-
   onColumnDrop($event: CdkDragDrop<any>) {
     if ($event.previousContainer === $event.container) {
       moveItemInArray($event.container.data, $event.previousIndex, $event.currentIndex);
@@ -308,6 +335,7 @@ export class DragDropComponent implements OnInit {
     file: File
   }
   files: File[] = [];
+
   upload() {
     console.log(this.files[0]);
     this.fileService.upload({
@@ -335,5 +363,10 @@ export class DragDropComponent implements OnInit {
     descriptionDialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
+  }
+
+  getBoard() {
+    console.log('get board');
+    this.store.dispatch(boardActions.getBoard({boardId: '3cbd05d6-b90f-4707-a99d-00450b40a7da'}));
   }
 }

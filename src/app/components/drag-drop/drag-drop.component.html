@@ -42,10 +42,14 @@
       </div>
 
       <div class="btns">
-        <button (click)="reset()">Reset</button>
-
         <button (click)="login()">Sign in</button>
         <br/>
 
-<input type="file" (change)="upFileSelected($event)">
-<button (click)="upload()">Upload</button>
+        <input type="file" (change)="upFileSelected($event)">
+        <button (click)="upload()">Upload</button>
+        <button (click)="logout()">Sign out</button>
+        <button (click)="getBoard()">call get board</button>
+      </div>
+    </div>
+  </div>
+</div>
