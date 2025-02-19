@@ -1,2 +1,15 @@
-<app-drag-drop></app-drag-drop>
+<!--<app-drag-drop></app-drag-drop>-->
 <!--<app-home></app-home>-->
+<div id="app-container">
+  <div id="sidebar">
+    <app-drawer
+      (toggleNotifications)="toggleNotificationsDrawer()"
+      (toggleSearch)="toggleSearchDrawer()"></app-drawer>
+  </div>
+
+  <div id="main-container" style="overflow-y: auto">
+    <app-notifications-drawer></app-notifications-drawer>
+    <app-search-drawer></app-search-drawer>
+  </div>
+</div>
+

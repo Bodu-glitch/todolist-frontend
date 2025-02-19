@@ -1,0 +1,118 @@
+#app-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+#sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: var(--mat-app-background-color);
+  color: var(--mat-app-text-color);
+  overflow-y: auto;
+}
+
+#main-container {
+  width: calc(100% - 250px);
+  height: 100%;
+
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+
+  mat-toolbar {
+    background-color: var(--md-sys-color-background);
+    height: fit-content;
+    padding: unset;
+  }
+}
+
+#content {
+  flex: 1;
+  overflow-y: hidden;
+  /* Allow scrolling in the main content area */
+
+  #drawer-container {
+    width: auto;
+    height: 100%;
+    overflow: hidden;
+
+    /* The background property is added to clearly distinguish the borders between drawer and main
+content */
+
+    #drawer {
+      padding: 12px;
+      background: var(--md-sys-color-surface-container);
+      width: 250px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    #drawer-content {
+      padding: 15px;
+
+      ::ng-deep .mat-toolbar-single-row {
+        background-color: var(--mat-app-background-color);
+      }
+    }
+  }
+}
+
+mat-drawer-content mat-toolbar mat-icon {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.2s ease;
+  transform: rotate(-270deg) rotateX(0deg);
+  z-index: 1;
+}
+
+mat-drawer-content mat-toolbar mat-icon:hover {
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+mat-list-item p {
+  margin: 0;
+}
+
+.overlay {
+  //background-color: var(--md-sys-color-surface-variant) !important;
+  //color: var(--md-sys-color-on-surface-variant) !important;
+  transition: transform 0.6s ease-in-out;
+  transform: rotate(-270deg) rotateX(180deg) !important;
+}
+
+#content-routing {
+  margin: 0 auto;
+  max-width: 1280px;
+  height: calc(100% - 56px);
+  overflow: unset;
+  width: 90%;
+}
+
+#main-container[_ngcontent-ng-c4137870598]
+mat-toolbar[_ngcontent-ng-c4137870598] {
+  background-color: unset;
+  height: fit-content;
+  padding: unset;
+}
+
+.mat-drawer.mat-drawer-side {
+  z-index: 1 !important;
+}
+
+.mat-toolbar ::ng-deep {
+  width: 40px;
+}
+
+.mat-drawer-content ::ng-deep {
+  display: flex;
+}
