@@ -38,3 +38,21 @@ export const getBoard$ = createEffect(
   },
   {functional: true}
 );
+
+export const searchBoards$ = createEffect(
+  (actions$ = inject(Actions), boardService = inject(BoardService)) => {
+    return actions$.pipe(
+      ofType(boardActions.searchBoards),
+      switchMap(({search}) =>
+        boardService.searchBoards(search).pipe(
+          map((boards: any) => boardActions.searchBoardsSuccess({boards: boards})),
+          catchError((error) => {
+            console.error('Error searching boards:', error);
+            return of(boardActions.searchBoardsFailure({errorMessage: error.message || 'Unknown error'}));
+          })
+        )
+      )
+    );
+  },
+  {functional: true}
+);

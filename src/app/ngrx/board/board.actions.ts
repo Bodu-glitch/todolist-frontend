@@ -6,3 +6,9 @@ export const getBoardSuccess = createAction('[Board] Get Board Actions Success',
 export const getBoardFailure = createAction('[Board] Get Board Actions Failure', props<{
   errorMessage: string
 }>());
+
+export const searchBoards = createAction('[Board] Search Boards Actions', props<{ search: string }>());
+export const searchBoardsSuccess = createAction('[Board] Search Boards Actions Success', props<{ boards: Board[] }>());
+export const searchBoardsFailure = createAction('[Board] Search Boards Actions Failure', props<{
+  errorMessage: string
+}>());

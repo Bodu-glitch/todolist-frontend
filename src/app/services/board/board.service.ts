@@ -23,7 +23,7 @@ export class BoardService {
   }
 
   searchBoards(search: string) {
-    return this.httpClient.get(`http://localhost:3000/board/search?search=${search}`, {headers: {Authorization: this.accesToken}});
+    return this.httpClient.post(`http://localhost:3000/board/search`,{search}, {headers: {Authorization: this.accesToken}});
   }
 
 }

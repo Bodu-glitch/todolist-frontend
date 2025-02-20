@@ -7,6 +7,11 @@ export interface BoardState {
   isGettingBoard: boolean
   isGettingBoardSuccess: boolean
   getBoardError: string
+
+  searchBoards: Board[]
+  isSearchingBoards: boolean
+  isSearchingBoardsSuccess: boolean
+  searchBoardsError: string
 }
 
 export interface Board {

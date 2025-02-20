@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {MatDrawer} from '@angular/material/sidenav';
 import {DrawerService} from '../../services/drawer.service';
 import {MaterialModule} from '../../shared/modules/material.module';
@@ -7,7 +7,8 @@ import {NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {BoardState} from '../../ngrx/board/board.state';
-import {BoardService} from '../../services/board/board.service';
+import {keyframes} from '@angular/animations';
+import * as boardActions from '../../ngrx/board/board.actions';
 
 @Component({
   selector: 'app-search-drawer',
@@ -16,7 +17,7 @@ import {BoardService} from '../../services/board/board.service';
   standalone: true,
   styleUrl: './search-drawer.component.scss'
 })
-export class SearchDrawerComponent implements AfterViewInit {
+export class SearchDrawerComponent implements AfterViewInit, OnInit {
   @ViewChild(MatDrawer) drawer!: MatDrawer;
 
   @Input() isSearchOpen = false;
@@ -26,26 +27,46 @@ export class SearchDrawerComponent implements AfterViewInit {
     image: string;
   }[] = []
   boardName: string = '';
+  interval: any;
 
 
   constructor(protected drawerService: DrawerService,
               private store: Store<{
                 board: BoardState
-              }>,
-              private boardService: BoardService) {
+              }>) {
   }
+
+  ngOnInit() {
+    this.store.select('board', 'isSearchingBoardsSuccess').subscribe((isSearchingBoardsSuccess) => {
+      if(isSearchingBoardsSuccess){
+        this.store.select('board', 'searchBoards').subscribe((boards) => {
+          this.boards = boards.map((board) => {
+            return {
+              name: board.name,
+              image: board.backgroundId
+          };
+        })
+      })
+    }})
+  }
+
 
   ngAfterViewInit() {
     this.drawerService.setSearchDrawer(this.drawer);
   }
 
   searchBoard() {
-    console.log(this.boardName)
-    this.boardService.searchBoards(this.boardName).subscribe((boards: any) => {
-      console.log(boards)
-      if (boards) {
-        this.boards = boards;
-      }
-    })
+    this.store.dispatch(boardActions.searchBoards({search: this.boardName}))
   }
+
+  boardNameChange(event: any) {
+    if(this.boardName != ''){
+      clearInterval(this.interval)
+      this.interval = setTimeout(() => {
+        this.searchBoard()
+      },500)
+    }
+  }
+
+  protected readonly keyframes = keyframes;
 }

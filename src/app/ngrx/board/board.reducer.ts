@@ -6,7 +6,12 @@ const initialState: BoardState = {
   board: null,
   isGettingBoard: false,
   isGettingBoardSuccess: false,
-  getBoardError: ''
+  getBoardError: '',
+
+  searchBoards: [],
+  isSearchingBoards: false,
+  isSearchingBoardsSuccess: false,
+  searchBoardsError: ''
 };
 
 export const boardReducer = createReducer(
@@ -37,6 +42,34 @@ export const boardReducer = createReducer(
       isGettingBoard: false,
       isGettingBoardSuccess: false,
       getBoardError: errorMessage
+    };
+  }),
+  on(boardActions.searchBoards, (state, {type}) => {
+    console.log(type)
+    return {
+      ...state,
+      isSearchingBoards: true,
+      isSearchingBoardsSuccess: false,
+      searchBoardsError: ''
+    };
+  }),
+  on(boardActions.searchBoardsSuccess, (state, {boards, type}) => {
+    console.log(type)
+    return {
+      ...state,
+      searchBoards: boards,
+      isSearchingBoards: false,
+      isSearchingBoardsSuccess: true,
+      searchBoardsError: ''
+    };
+  }),
+  on(boardActions.searchBoardsFailure, (state, {errorMessage, type}) => {
+    console.log(type)
+    return {
+      ...state,
+      isSearchingBoards: false,
+      isSearchingBoardsSuccess: false,
+      searchBoardsError: errorMessage
     };
   })
 )
