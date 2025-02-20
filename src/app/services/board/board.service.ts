@@ -22,4 +22,8 @@ export class BoardService {
     return this.httpClient.get(`http://localhost:3000/board/${id}`, {headers: {Authorization: this.accesToken}});
   }
 
+  searchBoards(search: string) {
+    return this.httpClient.get(`http://localhost:3000/board/search?search=${search}`, {headers: {Authorization: this.accesToken}});
+  }
+
 }

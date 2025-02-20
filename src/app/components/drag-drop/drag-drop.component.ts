@@ -228,24 +228,45 @@ export class DragDropComponent implements OnInit {
   columns$: Board['lists']
 
   drop(event: CdkDragDrop<any>) {
-    console.log(event)
-
     const previousIndex = parseInt(event.previousContainer.id.split('-').pop()!, 10) - 1;
     const currentIndex = parseInt(event.container.id.split('-').pop()!, 10) - 1;
 
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      if (Array.isArray(this.columns$)) {
+        console.log(this.columns$[previousIndex]);
+        const updatedColumns = [...this.columns$[previousIndex].cards.map((card: any) => ({...card}))];
+        moveItemInArray(updatedColumns, event.previousIndex, event.currentIndex);
+        this.columns$ = this.columns$.map((col, index) => {
+          if (index === previousIndex) {
+            return {...col, cards: [...updatedColumns]};
+          }
+          return col;
+        });
+      }
     } else {
+      const previousContainer = [...event.previousContainer.data.map((item: any) => ({...item}))];
+      const container = [...event.container.data.map((item: any) => ({...item}))];
       transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
+        previousContainer,
+        container,
         event.previousIndex,
         event.currentIndex,
       );
+      if (Array.isArray(this.columns$)) {
+        this.columns$ = this.columns$.map((col, index) => {
+          if (index === previousIndex) {
+            return {...col, cards: [...previousContainer]};
+          }
+          if (index === currentIndex) {
+            return {...col, cards: [...container]};
+          }
+          return col;
+        });
+      }
     }
     console.log(this.columns$);
 
-    if (Array.isArray(this.columns$)){
+    if (Array.isArray(this.columns$)) {
       console.log(this.columns$[previousIndex]);
       console.log(this.columns$[currentIndex]);
       this.store.dispatch(listActions.updateCard({
@@ -323,5 +344,5 @@ export class DragDropComponent implements OnInit {
     this.store.dispatch(boardActions.getBoard({boardId: '3cbd05d6-b90f-4707-a99d-00450b40a7da'}));
   }
 
-  protected readonly Array = Array;
+  protected Array = Array;
 }

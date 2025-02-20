@@ -11,24 +11,30 @@ import {Auth, onAuthStateChanged} from '@angular/fire/auth';
 import {Store} from '@ngrx/store';
 import {AuthState} from './ngrx/auth/auth.state';
 import * as authActions from './ngrx/auth/auth.actions';
+import {NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DragDropComponent, FullCalendarModule, DrawerComponent, NotificationsDrawerComponent, MaterialModule, SearchDrawerComponent],
+  imports: [RouterOutlet, DragDropComponent, FullCalendarModule, DrawerComponent, NotificationsDrawerComponent, MaterialModule, SearchDrawerComponent, NgStyle],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   title = 'untitled1';
+  isSearchOpen = false;
+
   toggleNotificationsDrawer() {
     this.drawerService.toggleNotifications();
     Object.assign(this, {NotificationsDrawerComponent});
   }
 
   toggleSearchDrawer() {
+    console.log('toggleSearchDrawer');
+    this.isSearchOpen = !this.isSearchOpen;
     this.drawerService.toggleSearch();
   }
+
   constructor(private drawerService: DrawerService,
               private googleAuth: Auth,
               private store: Store<{

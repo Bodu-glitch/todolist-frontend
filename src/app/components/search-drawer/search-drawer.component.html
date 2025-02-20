@@ -1,9 +1,23 @@
 <mat-drawer-container class="drawer-container">
-  <mat-drawer #drawer mode="side" class=".blurred-drawer">
+  <mat-drawer #drawer mode="over" class=".blurred-drawer">
     Search
+    <hr>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Input</mat-label>
+      <input matInput [(ngModel)]="boardName">
+    </mat-form-field>
+    <button mat-button (click)="searchBoard()">Search</button>
+    {{ boardName }}
+
+    @for (board of boards; track $index) {
+      <div class="board">
+        <h2>{{ board.name }}</h2>
+      </div>
+    }
   </mat-drawer>
 
-  <mat-drawer-content>
+  <mat-drawer-content [ngStyle]="{ display: isSearchOpen ? 'block' : 'none' }" style="width: 100%; height: 80vh">
     <mat-toolbar color="primary">
     </mat-toolbar>
 
