@@ -21,6 +21,7 @@ export const getBoard$ = createEffect(
             if (!board) {
               throw new Error('Board not found');
             }
+            console.log(board);
             return boardActions.getBoardSuccess({
               board: {
                 ...board,

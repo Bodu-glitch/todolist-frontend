@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
 import {
   CdkDragDrop,
   CdkDrag,
@@ -32,17 +32,21 @@ import {filter, Observable, take} from 'rxjs';
 import {Board, BoardState} from '../../ngrx/board/board.state';
 import {List, ListState} from '../../ngrx/list/list.state';
 import * as listActions from '../../ngrx/list/list.actions';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButton} from '@angular/material/button';
+import {ListService} from '../../services/list/list.service';
 
 @Component({
   selector: 'app-drag-drop',
   imports: [
-    CdkDropList, CdkDrag, CdkDropListGroup, FullCalendarModule, NgForOf, FormsModule, NavbarComponent, SidebarComponent, AsyncPipe
+    CdkDropList, CdkDrag, CdkDropListGroup, FullCalendarModule, NgForOf, FormsModule, NavbarComponent, SidebarComponent, AsyncPipe, MatFormFieldModule, MatInputModule, MatButton
   ],
   templateUrl: './drag-drop.component.html',
   standalone: true,
   styleUrl: './drag-drop.component.scss'
 })
-export class DragDropComponent implements OnInit {
+export class DragDropComponent implements OnInit, AfterViewInit {
   calendarOptions: CalendarOptions = {
     headerToolbar: {
       left: 'prev,next today',
@@ -109,6 +113,7 @@ export class DragDropComponent implements OnInit {
   };
 
   token!: string
+  board$!: Observable<Board | null>
 
   //firebase auth
   constructor(private gateway: GatewayService,
@@ -118,8 +123,9 @@ export class DragDropComponent implements OnInit {
                 board: BoardState,
                 list: ListState
               }>,
+              private listService: ListService
   ) {
-
+    this.board$ = this.store.select('board', 'board')
   }
 
   login() {
@@ -143,9 +149,9 @@ export class DragDropComponent implements OnInit {
     this.gateway.getMessage().subscribe((data: unknown) => {
       console.log(data);
     });
-    this.gateway.listenForTasksChange().subscribe((data) => {
-      this.columns$ = data;
-    })
+    // this.gateway.listenForTasksChange().subscribe((data) => {
+    //   this.columns$ = data;
+    // })
     this.gateway.listenForMouseMove().subscribe((data: { id: string, x: number, y: number }) => {
       console.log(data)
       this.data = data;
@@ -176,13 +182,17 @@ export class DragDropComponent implements OnInit {
         this.store.select('board', 'board').pipe(take(1)).subscribe((data) => {
           if (data) {
             if (Array.isArray(data.lists)) {
+              this.store.dispatch(listActions.storeLists({lists: data.lists}));
               this.columns$ = data.lists.map((list: List) => {
                 return {
                   id: list.id,
+                  createAt: list.createAt,
                   title: list.title,
                   cards: list.cards.map((card) => {
                     return {
                       id: card.id,
+                      labels: card.labels,
+                      createAt: card.createAt,
                       columnId: list.id,
                       title: card.title,
                       description: card.description
@@ -195,37 +205,34 @@ export class DragDropComponent implements OnInit {
         })
       }
     })
-    this.store.select('list', 'isUpdatingListsSuccess').subscribe((data) => {
-      if (data) {
-        this.store.select('list', 'lists').pipe(take(1)).subscribe((data) => {
-          if (data) {
-            if (Array.isArray(data)) {
-              this.columns$ = data.map((list: List) => {
-                return {
-                  id: list.id,
-                  title: list.title,
-                  cards: list.cards.map((card) => {
-                    return {
-                      id: card.id,
-                      columnId: list.id,
-                      title: card.title,
-                      description: card.description
-                    }
-                  })
-                }
-              });
-            }
+    this.store.select('list', 'lists').subscribe((data) => {
+      console.log(data)
+      if (data && Array.isArray(data)) {
+        this.columns$ = data.map((list: List) => {
+          const foundColumn = this.columns$?.find((col) => col.id === list.id);
+
+          const newCards = foundColumn?.cards ?? (Array.isArray(data[data.length - 1]?.cards) ? data[data.length - 1].cards : []);
+
+          return {
+            id: list.id,
+            title: list.title,
+            createAt: list.createAt,
+            cards: newCards
           }
         })
       }
-    })
+    });
+  }
+
+  ngAfterViewInit() {
+    this.setBackground();
   }
 
 
   todo = ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep'];
 
   done = ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog'];
-  columns$: Board['lists']
+  columns$!: List[]
 
   drop(event: CdkDragDrop<any>) {
     const previousIndex = parseInt(event.previousContainer.id.split('-').pop()!, 10) - 1;
@@ -345,4 +352,34 @@ export class DragDropComponent implements OnInit {
   }
 
   protected Array = Array;
+  listName = '';
+
+  addList() {
+    this.store.dispatch(listActions.addNewList({
+      list: {
+        title: this.listName,
+        createAt: new Date(),
+        cards: [],
+        id: ''
+      }, boardId: '3cbd05d6-b90f-4707-a99d-00450b40a7da'
+    }));
+  }
+
+  deleteColumn(column: List) {
+    this.store.dispatch(listActions.deleteList({listId: column.id}));
+  }
+
+  setBackground() {
+    const elements = document.getElementsByClassName('drag-drop');
+    if (elements.length > 0) {
+      const element = elements[0] as HTMLElement;
+      this.board$.subscribe((board) => {
+        if (!board?.background.color) {
+          element.style.background = `url(${board?.background.fileLocation})`
+        } else {
+          element.style.background = board?.background.color;
+        }
+      });
+    }
+  }
 }

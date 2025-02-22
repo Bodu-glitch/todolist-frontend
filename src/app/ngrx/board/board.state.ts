@@ -17,9 +17,13 @@ export interface BoardState {
 export interface Board {
   id: string
   name: string
-  backgroundId: string
+  backgroundId: string,
+  background: {
+    color: string,
+    fileLocation: string,
+  },
   createAt: Date
-  lists: List[] | unknown
+  lists: List[] | null
   owner: string
   members: string[]
   labels: LabelState[]

@@ -19,6 +19,13 @@ export class ListService {
     });
   }
 
+  addNewList(list: List, boardId: string) {
+    return this.httpClient.post(`http://localhost:3000/list/new-list`, {
+      list,
+      boardId
+    }, {headers: {Authorization: this.accesToken}});
+  }
+
   getLists(boardId: string) {
     console.log(this.accesToken);
     return this.httpClient.get(`http://localhost:3000/list/cards/${boardId}`, {headers: {Authorization: this.accesToken}});
@@ -38,5 +45,9 @@ export class ListService {
       list,
       boardId
     }, {headers: {Authorization: this.accesToken}});
+  }
+
+  deleteList(listId: string) {
+    return this.httpClient.delete(`http://localhost:3000/list/${listId}`, {headers: {Authorization: this.accesToken}});
   }
 }

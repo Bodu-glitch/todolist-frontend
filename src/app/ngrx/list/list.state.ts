@@ -6,6 +6,10 @@ export interface ListState {
   isGettingListsSuccess: boolean
   getListsError: string
 
+  isAddingList: boolean
+  isAddingListSuccess: boolean
+  addListError: string
+
   isUpdatingLists: boolean
   isUpdatingListsSuccess: boolean
   updateListsError: string
@@ -13,6 +17,10 @@ export interface ListState {
   isUpdatingCard: boolean
   isUpdatingCardSuccess: boolean
   updateCardError: string
+
+  isDeletingList: boolean
+  isDeletingListSuccess: boolean
+  deleteListError: string
 }
 
 export interface List {

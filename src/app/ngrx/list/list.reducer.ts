@@ -8,17 +8,56 @@ const initialState: ListState = {
   isGettingListsSuccess: false,
   getListsError: '',
 
+  addListError: '',
+  isAddingList: false,
+  isAddingListSuccess: false,
+
   isUpdatingLists: false,
   isUpdatingListsSuccess: false,
   updateListsError: '',
 
   isUpdatingCard: false,
   isUpdatingCardSuccess: false,
-  updateCardError: ''
+  updateCardError: '',
+
+  isDeletingList: false,
+  isDeletingListSuccess: false,
+  deleteListError: ''
 };
 
 export const listReducer = createReducer(
   initialState,
+  on(listActions.addNewList, (state, {list, boardId}) => {
+    return {
+      ...state,
+      isAddingList: true,
+      isAddingListSuccess: false,
+      addListError: ''
+    };
+  }),
+  on(listActions.addNewListSuccess, (state, {list}) => {
+    return {
+      ...state,
+      lists: list,
+      isAddingList: false,
+      isAddingListSuccess: true,
+      addListError: ''
+    };
+  }),
+  on(listActions.addNewListFailure, (state, {error}) => {
+    return {
+      ...state,
+      isAddingList: false,
+      isAddingListSuccess: false,
+      addListError: error
+    };
+  }),
+  on(listActions.storeLists, (state, {lists}) => {
+    return {
+      ...state,
+      lists: lists,
+    };
+  }),
   on(listActions.updatePosition, (state, {type, list, boardId}) => {
     console.log(type)
     return {
@@ -74,6 +113,34 @@ export const listReducer = createReducer(
       isUpdatingCard: false,
       isUpdatingCardSuccess: false,
       updateCardError: error
+    };
+  }),
+  on(listActions.deleteList, (state, {type, listId}) => {
+    console.log(type)
+    console.log(state)
+    return {
+      ...state,
+      isDeletingList: true,
+      isDeletingListSuccess: false,
+      deleteListError: ''
+    };
+  }),
+  on(listActions.deleteListSuccess, (state, {listId, type}) => {
+    console.log(type)
+    return {
+      ...state,
+      lists: state.lists.filter(list => list.id !== listId),
+      isDeletingList: false,
+      isDeletingListSuccess: true,
+      deleteListError: ''
+    };
+  }),
+  on(listActions.deleteListFailure, (state, {error, type}) => {
+    return {
+      ...state,
+      isDeletingList: false,
+      isDeletingListSuccess: false,
+      deleteListError: error
     };
   }),
 )
