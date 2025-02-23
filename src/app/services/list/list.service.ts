@@ -19,7 +19,7 @@ export class ListService {
     });
   }
 
-  addNewList(list: List, boardId: string) {
+  addNewList( list: List, boardId: string) {
     return this.httpClient.post(`http://localhost:3000/list/new-list`, {
       list,
       boardId

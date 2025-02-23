@@ -27,7 +27,8 @@ const initialState: ListState = {
 
 export const listReducer = createReducer(
   initialState,
-  on(listActions.addNewList, (state, {list, boardId}) => {
+  on(listActions.addNewList, (state, {type, list, boardId}) => {
+    console.log(type)
     return {
       ...state,
       isAddingList: true,

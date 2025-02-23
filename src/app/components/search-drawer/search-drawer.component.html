@@ -5,7 +5,7 @@
 
     <mat-form-field class="example-full-width">
       <mat-label>Input</mat-label>
-      <input matInput [(ngModel)]="boardName" (input)="boardNameChange($event)" >
+      <input matInput [(ngModel)]="boardName" (input)="boardNameChange()" >
     </mat-form-field>
     <button mat-button (click)="searchBoard()">Search</button>
     {{boardName}}

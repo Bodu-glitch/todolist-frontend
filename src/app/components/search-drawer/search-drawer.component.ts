@@ -9,6 +9,7 @@ import {Store} from '@ngrx/store';
 import {BoardState} from '../../ngrx/board/board.state';
 import {keyframes} from '@angular/animations';
 import * as boardActions from '../../ngrx/board/board.actions';
+import {debounceTime, Subject} from 'rxjs';
 
 @Component({
   selector: 'app-search-drawer',
@@ -36,6 +37,8 @@ export class SearchDrawerComponent implements AfterViewInit, OnInit {
               }>) {
   }
 
+  boardNameSubject = new Subject<string>();
+
   ngOnInit() {
     this.store.select('board', 'isSearchingBoardsSuccess').subscribe((isSearchingBoardsSuccess) => {
       if(isSearchingBoardsSuccess){
@@ -48,6 +51,13 @@ export class SearchDrawerComponent implements AfterViewInit, OnInit {
         })
       })
     }})
+    this.boardNameSubject.pipe(
+      debounceTime(500)
+    ).subscribe(value => {
+      if (value !== '') {
+        this.searchBoard();
+      }
+    });
   }
 
 
@@ -59,13 +69,8 @@ export class SearchDrawerComponent implements AfterViewInit, OnInit {
     this.store.dispatch(boardActions.searchBoards({search: this.boardName}))
   }
 
-  boardNameChange(event: any) {
-    if(this.boardName != ''){
-      clearInterval(this.interval)
-      this.interval = setTimeout(() => {
-        this.searchBoard()
-      },500)
-    }
+  boardNameChange() {
+    this.boardNameSubject.next(this.boardName);
   }
 
   protected readonly keyframes = keyframes;
