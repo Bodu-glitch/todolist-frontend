@@ -382,4 +382,9 @@ export class DragDropComponent implements OnInit, AfterViewInit {
       });
     }
   }
+
+
+  addCard(listId: string) {
+    
+  }
 }

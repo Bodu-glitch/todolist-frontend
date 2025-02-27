@@ -21,6 +21,7 @@
                 <div class="title-container">
                   <h2>{{ column.title }}</h2>
                   <button (click)="deleteColumn(column)" mat-flat-button>Delete</button>
+                  <button mat-flat-button (click)="addCard(column.id)">Add Card</button>
                 </div>
                 <div
                   cdkDropList
@@ -64,3 +65,4 @@
 </mat-form-field>
 
 <button mat-flat-button (click)="addList()">Add List</button>
+
